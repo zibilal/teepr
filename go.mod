@@ -1,4 +1,4 @@
-module teepr
+module github.com/zibilal/teepr
 
 go 1.13
 
