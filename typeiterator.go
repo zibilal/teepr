@@ -17,7 +17,7 @@ const (
 	DefaultDateLayout   = "2006-01-02 15:04:05"
 )
 
-func TypeIterator(input interface{}, output interface{}, customValues ...func(interface{}) (interface{}, error)) (err error) {
+func Teepr(input interface{}, output interface{}, customValues ...func(interface{}) (interface{}, error)) (err error) {
 
 	// it is ok to be panicked
 	defer func() {
@@ -164,14 +164,14 @@ func TypeIterator(input interface{}, output interface{}, customValues ...func(in
 								if elemival.Index(idx).Kind() == reflect.Interface {
 									tmpelemival = elemival.Index(idx).Elem()
 								}
-								err = TypeIterator(tmpelemival.Interface(), theOutput.Interface(), customValues...)
+								err = Teepr(tmpelemival.Interface(), theOutput.Interface(), customValues...)
 								mSlice = reflect.Append(mSlice, theOutput.Elem())
 							}
 							foval.Set(mSlice)
 						} else {
 							if mival.Interface() != nil {
 								pval := reflect.Indirect(mival.Elem())
-								err = TypeIterator(pval.Interface(), foval.Addr().Interface(), customValues...)
+								err = Teepr(pval.Interface(), foval.Addr().Interface(), customValues...)
 								if err != nil {
 									return
 								}
@@ -323,7 +323,7 @@ func TypeIterator(input interface{}, output interface{}, customValues ...func(in
 					default:
 						if otyp.Elem().Kind() == reflect.Struct {
 							vvtyp := reflect.New(otyp.Elem())
-							eerr := TypeIterator(mival.Interface(), vvtyp.Interface(), customValues...)
+							eerr := Teepr(mival.Interface(), vvtyp.Interface(), customValues...)
 
 							if eerr != nil {
 								return eerr
@@ -436,7 +436,7 @@ func TypeIterator(input interface{}, output interface{}, customValues ...func(in
 						fout.Set(reflect.ValueOf(data.Time))
 					}
 				} else if fin.Kind() == reflect.Map {
-					err = TypeIterator(fin.Interface(), fout.Interface(), customValues...)
+					err = Teepr(fin.Interface(), fout.Interface(), customValues...)
 					if err != nil {
 						return err
 					}
@@ -455,7 +455,7 @@ func TypeIterator(input interface{}, output interface{}, customValues ...func(in
 						}
 						iout := reflect.New(atype)
 
-						err = TypeIterator(fin.Interface(), iout.Interface(), customValues...)
+						err = Teepr(fin.Interface(), iout.Interface(), customValues...)
 						if err != nil {
 							return
 						}
@@ -481,7 +481,7 @@ func TypeIterator(input interface{}, output interface{}, customValues ...func(in
 
 				oItem := reflect.New(otyp.Elem())
 				iItem := ival.Index(i)
-				err = TypeIterator(iItem.Interface(), oItem.Interface(), customValues...)
+				err = Teepr(iItem.Interface(), oItem.Interface(), customValues...)
 				if err != nil {
 					return
 				}
@@ -616,7 +616,7 @@ func TypeIterator(input interface{}, output interface{}, customValues ...func(in
 		return nil
 	case reflect.Interface:
 		pival := ival.Elem()
-		err = TypeIterator(pival.Interface(), output, customValues...)
+		err = Teepr(pival.Interface(), output, customValues...)
 		if err != nil {
 			return
 		}

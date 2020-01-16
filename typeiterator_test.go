@@ -62,7 +62,7 @@ func TestSimpleTest(t *testing.T) {
 			Name string `transform:"item_name" json:"name" transform:"the_item"`
 		}{}
 
-		err := TypeIterator(input, &output)
+		err := Teepr(input, &output)
 
 		if err != nil {
 			t.Fatalf("%s expected error nil, got %s", failed, err.Error())
@@ -89,7 +89,7 @@ func TestTypeWithTime(t *testing.T) {
 		input["name"] = "Test Second"
 		input["date_birth"] = "1977-12-11 12:21:50"
 
-		err := TypeIterator(input, &output)
+		err := Teepr(input, &output)
 		if err != nil {
 			t.Fatalf("%s expected error nil, got %s", failed, err.Error())
 		}
@@ -109,7 +109,7 @@ func TestTypeIterator(t *testing.T) {
 		ival1 := 20
 		oval1 := 0
 
-		err := TypeIterator(ival1, &oval1)
+		err := Teepr(ival1, &oval1)
 
 		if err != nil {
 			t.Fatalf("%s expected error nil, got %s", failed, err.Error())
@@ -126,7 +126,7 @@ func TestTypeIterator(t *testing.T) {
 		ival2 := 20.50
 		oval2 := 0.0
 
-		err = TypeIterator(ival2, &oval2)
+		err = Teepr(ival2, &oval2)
 
 		if err != nil {
 			t.Fatalf("%s expected error nil, got %s", failed, err.Error())
@@ -143,7 +143,7 @@ func TestTypeIterator(t *testing.T) {
 		ival3 := "dua puluh lima"
 		oval3 := ""
 
-		err = TypeIterator(ival3, &oval3)
+		err = Teepr(ival3, &oval3)
 
 		if err != nil {
 			t.Fatalf("%s expected error nil, got %s", failed, err.Error())
@@ -171,7 +171,7 @@ func TestTypeIteratorWithStructInputOutput(t *testing.T) {
 			Point    float64 `val:"point"`
 		}{}
 
-		err := TypeIterator(ival, &oval)
+		err := Teepr(ival, &oval)
 
 		if err != nil {
 			t.Fatalf("%s expected error nil, got %s", failed, err.Error())
@@ -216,7 +216,7 @@ func TestTypeIteratorWithStructInputOutput(t *testing.T) {
 			Profile interface{}
 		}{}
 
-		err := TypeIterator(ival, &oval)
+		err := Teepr(ival, &oval)
 		if err != nil {
 			t.Fatalf("%s expected error nil, got %s", failed, err.Error())
 		} else {
@@ -257,7 +257,7 @@ func TestTypeIteratorWithStructInputOutput(t *testing.T) {
 
 		profEx := ProfileExample{}
 
-		err := TypeIterator(userEx, &profEx)
+		err := Teepr(userEx, &profEx)
 		if err != nil {
 			t.Fatalf("%s expected err not nil, got %s", failed, err.Error())
 		} else {
@@ -281,7 +281,7 @@ func TestTypeIteratorWithStructInputOutput(t *testing.T) {
 }
 
 func TestTypeIteratorWithMapInput(t *testing.T) {
-	t.Log("Testing TypeIterator with map input, output bytes.Buffer")
+	t.Log("Testing Teepr with map input, output bytes.Buffer")
 	{
 		map1 := make(map[string]ServiceDetail)
 		map1["1"] = ServiceDetail{}
@@ -291,7 +291,7 @@ func TestTypeIteratorWithMapInput(t *testing.T) {
 		}
 
 		map2 := bytes.NewBufferString("")
-		err := TypeIterator(map1, map2)
+		err := Teepr(map1, map2)
 
 		if err != nil {
 			t.Fatalf("%s expected error nil, got %s", failed, err.Error())
@@ -309,7 +309,7 @@ func TestTypeIteratorWithMapInput(t *testing.T) {
 		}
 	}
 
-	t.Log("Testing TypeIterator with map input, output map of struct")
+	t.Log("Testing Teepr with map input, output map of struct")
 	{
 		map1 := make(map[string]ServiceDetail)
 		map1["1"] = ServiceDetail{
@@ -324,7 +324,7 @@ func TestTypeIteratorWithMapInput(t *testing.T) {
 
 		map2 := make(map[string]ServiceCost)
 
-		err := TypeIterator(map1, &map2)
+		err := Teepr(map1, &map2)
 
 		if err != nil {
 			t.Fatalf("%s expected error nil, got %s", failed, err.Error())
@@ -374,7 +374,7 @@ func TestTypeIteratorStructWithSliceToStructWithSlice(t *testing.T) {
 			Items   interface{}
 		}{}
 
-		err := TypeIterator(order, &orderOutput)
+		err := Teepr(order, &orderOutput)
 
 		if err != nil {
 			t.Fatalf("%s expected error nil, got %s", failed, err.Error())
@@ -421,7 +421,7 @@ func TestTypeIteratorStructWithSliceToStructWithSlice(t *testing.T) {
 			Items   []Item
 		}{}
 
-		err := TypeIterator(order, &orderOutput)
+		err := Teepr(order, &orderOutput)
 
 		if err != nil {
 			t.Fatalf("%s expected error nil, got %s", failed, err.Error())
@@ -442,7 +442,7 @@ func TestTypeIteratorStructWithSliceToStructWithSlice(t *testing.T) {
 }
 
 func TestMapTypedonTypeIterator(t *testing.T) {
-	t.Log("Testing TypeIterator on Map input")
+	t.Log("Testing Teepr on Map input")
 	{
 		dataString := ` {"_id" : {"$oid" : "5b2ca6d5fc0eab2244d31567"},"aggregate_id" : "000000010","created_at" : {"$date" : 1529652949638},"updated_at" : {"$date" : 1529652949638},"events" : [{"event_id" : "b363a221-3893-44e6-b08e-35c3ff3bfe6d","reference" : "201806220235490045346127","event_type" : "OrderCreated","aggregate_id" : "000000010","created_at" : {"$date" : 1529652949638},"updated_at" : {"$date" : 1529652949638},"version" : 1,"payload" : {"created_at" : {"$date" : 1529652949638},"expired_date" : {"$date" : 1529652949638},"customer_id" : {"$numberLong" : "123455676"},"campaign_id" : "","id" : "000000010","reference" : "201806220235490045346127","shipment_type" : 0,"shipping_cost" : 0.0,"status" : "Order Created","subtotal_price" : 0.0,"user_id" : {"$numberLong" : "12445"},"vendor_id" : {"$numberLong" : "15544"},"order_items" : [{"attributes" : "{\"Customer\":{\"cellphone_number\":\"0818780077\"},\"PurchaseReferral\":{\"action\":\"pulsa\"}}","description" : "XL 5 giga Ultimate Internate","item_image" : "","commission" : 3500.0,"name" : "","product_code" : "C443243234","price" : 25000.0,"quantity" : 2,"reseller_price" : 26000.0,"item_id" : {"$numberLong" : "15540"}}, {"attributes" : "{\"Customer\":{\"cellphone_number\":\"0812780077\"},\"PurchaseReferral\":{\"action\":\"pulsa\"}}","description" : "Telkomsel flash 5 giga Ultimate Internate","item_image" : "","commission" : 3500.0,"name" : "","product_code" : "C443243234","price" : 25000.0,"quantity" : 2,"reseller_price" : 26000.0,"item_id" : {"$numberLong" : "15540"}}],"agent_id" : {"$numberLong" : "0"},"device_id" : "5566478997710","total_commission" : 0.0,"shipping_trx_id" : "","channel" : "","total_price" : 0.0,"payment_type" : "","merchant_trx_id" : "","cart_id" : ""}}]}`
 		dataMap := make(map[string]interface{})
@@ -496,7 +496,7 @@ func TestMapTypedonTypeIterator(t *testing.T) {
 
 			return nil, fmt.Errorf("unable to handle data: %v", input)
 		}
-		err = TypeIterator(dataMap, &dataAggregate, handleDateTag, handleIdTag, handleLongTag)
+		err = Teepr(dataMap, &dataAggregate, handleDateTag, handleIdTag, handleLongTag)
 		if err != nil {
 			t.Fatalf("%s expected error nil, got %s", failed, err.Error())
 		} else {
@@ -568,7 +568,7 @@ func TestIterateStructWithInterfaceTypedField(t *testing.T) {
 		}
 	}
 
-	t.Log("Testing With TypeIterator")
+	t.Log("Testing With Teepr")
 	{
 
 		checkoutOutput := struct {
@@ -578,7 +578,7 @@ func TestIterateStructWithInterfaceTypedField(t *testing.T) {
 			Checkouts   []CheckoutResponse `bson:"events" json:"events"`
 		}{}
 
-		if err := TypeIterator(checkoutEvent, &checkoutOutput); err != nil {
+		if err := Teepr(checkoutEvent, &checkoutOutput); err != nil {
 			t.Fatalf("%s expected error nil, got %s", failed, err.Error())
 		} else {
 			if IsEmpty(checkoutOutput) {
@@ -618,7 +618,7 @@ func TestIterateStructWithInterfaceTypedField(t *testing.T) {
 			Checkouts   []CheckoutResponse `bson:"events" json:"events"`
 		}{}
 
-		if err := TypeIterator(mval, &checkoutOutput); err != nil {
+		if err := Teepr(mval, &checkoutOutput); err != nil {
 			t.Fatalf("%s expected error nil, got %s", failed, err.Error())
 		} else {
 			if IsEmpty(checkoutOutput) {
