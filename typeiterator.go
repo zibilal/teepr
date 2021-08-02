@@ -39,13 +39,6 @@ func Teepr(input interface{}, output interface{}, customValues ...func(interface
 	oval := reflect.Indirect(reflect.ValueOf(output))
 	otyp := oval.Type()
 
-	fmt.Println("IType", ityp)
-	fmt.Println("IVal", ival)
-	fmt.Println("IVal.Kind", ival.Kind())
-	fmt.Println("OVal", oval)
-	fmt.Println("OTyp", otyp)
-	fmt.Println("--------------------------------")
-
 	switch ival.Kind() {
 	case reflect.Map:
 
