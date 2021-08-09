@@ -157,11 +157,13 @@ func TestTypeIterator(t *testing.T) {
 
 func TestTypeIteratorWithStructInputOutput(t *testing.T) {
 
+	t.Log("----------------------------------------")
 	t.Log("testing input and output a simple struct")
+	t.Log("----------------------------------------")
 	{
 		ival := struct {
 			Name  string  `json:"name"`
-			Point float64 `json:"point"`
+			Point float64 `json:"point,omitempty"`
 		}{
 			"Test1", 12.2,
 		}
@@ -192,7 +194,9 @@ func TestTypeIteratorWithStructInputOutput(t *testing.T) {
 		}
 	}
 
+	t.Log("--------------------------------------")
 	t.Log("testing input and output nested struct")
+	t.Log("--------------------------------------")
 	{
 		ival := struct {
 			Name    string
@@ -237,7 +241,9 @@ func TestTypeIteratorWithStructInputOutput(t *testing.T) {
 		}
 	}
 
+	t.Log("--------------------------")
 	t.Log("input with nested struct")
+	t.Log("--------------------------")
 	{
 		userEx := UserExample{
 			FirstName: "firstex",

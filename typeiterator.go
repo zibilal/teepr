@@ -2,7 +2,6 @@ package teepr
 
 import (
 	"database/sql"
-	"errors"
 	"fmt"
 	"github.com/go-sql-driver/mysql"
 	"log"
@@ -22,7 +21,7 @@ func Teepr(input interface{}, output interface{}, customValues ...func(interface
 	// it is ok to be panicked
 	defer func() {
 		if r := recover(); r != nil {
-			log.Println("unable to continue iterate value ", fmt.Sprintf("%v", r))
+			log.Println("[Teepr]unable to continue iterate value ", fmt.Sprintf("%v", r))
 		}
 	}()
 
@@ -43,7 +42,7 @@ func Teepr(input interface{}, output interface{}, customValues ...func(interface
 	case reflect.Map:
 
 		if oval.Kind() != reflect.Map && oval.Kind() != reflect.Struct && oval.Kind() != reflect.Ptr {
-			return fmt.Errorf("expecting output type of map or struct")
+			return fmt.Errorf("[Teepr]expecting output type of map or struct")
 		}
 
 		for _, k := range ival.MapKeys() {
@@ -173,6 +172,7 @@ func Teepr(input interface{}, output interface{}, customValues ...func(interface
 								pval := reflect.Indirect(mival.Elem())
 								err = Teepr(pval.Interface(), foval.Addr().Interface(), customValues...)
 								if err != nil {
+									log.Println("[Teepr]", err.Error())
 									return
 								}
 							}
@@ -193,6 +193,7 @@ func Teepr(input interface{}, output interface{}, customValues ...func(interface
 							var itmp64 int64
 							itmp64, err = strconv.ParseInt(mival.Interface().(string), 10, 64)
 							if err != nil {
+								log.Println("[Teepr]", err.Error())
 								return
 							}
 							oval.SetMapIndex(k, reflect.ValueOf(int(itmp64)))
@@ -204,6 +205,7 @@ func Teepr(input interface{}, output interface{}, customValues ...func(interface
 							var itmp64 int64
 							itmp64, err = strconv.ParseInt(mival.Interface().(string), 10, 64)
 							if err != nil {
+								log.Println("[Teepr]", err.Error())
 								return
 							}
 							oval.SetMapIndex(k, reflect.ValueOf(int8(itmp64)))
@@ -215,6 +217,7 @@ func Teepr(input interface{}, output interface{}, customValues ...func(interface
 							var itmp64 int64
 							itmp64, err = strconv.ParseInt(mival.Interface().(string), 10, 64)
 							if err != nil {
+								log.Println("[Teepr]", err.Error())
 								return
 							}
 							oval.SetMapIndex(k, reflect.ValueOf(int16(itmp64)))
@@ -226,6 +229,7 @@ func Teepr(input interface{}, output interface{}, customValues ...func(interface
 							var itmp64 int64
 							itmp64, err = strconv.ParseInt(mival.Interface().(string), 10, 64)
 							if err != nil {
+								log.Println("[Teepr]", err.Error())
 								return
 							}
 							oval.SetMapIndex(k, reflect.ValueOf(int32(itmp64)))
@@ -237,6 +241,7 @@ func Teepr(input interface{}, output interface{}, customValues ...func(interface
 							var itmp64 int64
 							itmp64, err = strconv.ParseInt(mival.Interface().(string), 10, 64)
 							if err != nil {
+								log.Println("[Teepr]", err.Error())
 								return
 							}
 							oval.SetMapIndex(k, reflect.ValueOf(itmp64))
@@ -248,6 +253,7 @@ func Teepr(input interface{}, output interface{}, customValues ...func(interface
 							var itmp64 uint64
 							itmp64, err = strconv.ParseUint(mival.Interface().(string), 10, 64)
 							if err != nil {
+								log.Println("[Teepr]", err.Error())
 								return
 							}
 							oval.SetMapIndex(k, reflect.ValueOf(uint(itmp64)))
@@ -259,6 +265,7 @@ func Teepr(input interface{}, output interface{}, customValues ...func(interface
 							var itmp64 uint64
 							itmp64, err = strconv.ParseUint(mival.Interface().(string), 10, 64)
 							if err != nil {
+								log.Println("[Teepr]", err.Error())
 								return
 							}
 							oval.SetMapIndex(k, reflect.ValueOf(uint8(itmp64)))
@@ -270,6 +277,7 @@ func Teepr(input interface{}, output interface{}, customValues ...func(interface
 							var itmp64 uint64
 							itmp64, err = strconv.ParseUint(mival.Interface().(string), 10, 64)
 							if err != nil {
+								log.Println("[Teepr]", err.Error())
 								return
 							}
 							oval.SetMapIndex(k, reflect.ValueOf(uint16(itmp64)))
@@ -281,6 +289,7 @@ func Teepr(input interface{}, output interface{}, customValues ...func(interface
 							var itmp64 uint64
 							itmp64, err = strconv.ParseUint(mival.Interface().(string), 10, 64)
 							if err != nil {
+								log.Println("[Teepr]", err.Error())
 								return
 							}
 							oval.SetMapIndex(k, reflect.ValueOf(uint32(itmp64)))
@@ -292,6 +301,7 @@ func Teepr(input interface{}, output interface{}, customValues ...func(interface
 							var itmp64 uint64
 							itmp64, err = strconv.ParseUint(mival.Interface().(string), 10, 64)
 							if err != nil {
+								log.Println("[Teepr]", err.Error())
 								return
 							}
 							oval.SetMapIndex(k, reflect.ValueOf(itmp64))
@@ -303,6 +313,7 @@ func Teepr(input interface{}, output interface{}, customValues ...func(interface
 							var ftmp64 float64
 							ftmp64, err = strconv.ParseFloat(mival.Interface().(string), 64)
 							if err != nil {
+								log.Println("[Teepr]", err.Error())
 								return
 							}
 							oval.SetMapIndex(k, reflect.ValueOf(float32(ftmp64)))
@@ -314,6 +325,7 @@ func Teepr(input interface{}, output interface{}, customValues ...func(interface
 							var ftmp64 float64
 							ftmp64, err = strconv.ParseFloat(mival.Interface().(string), 64)
 							if err != nil {
+								log.Println("[Teepr]", err.Error())
 								return
 							}
 							oval.SetMapIndex(k, reflect.ValueOf(ftmp64))
@@ -326,12 +338,13 @@ func Teepr(input interface{}, output interface{}, customValues ...func(interface
 							eerr := Teepr(mival.Interface(), vvtyp.Interface(), customValues...)
 
 							if eerr != nil {
+								log.Println("[Teepr]", err.Error())
 								return eerr
 							}
 
 							oval.SetMapIndex(k, vvtyp.Elem())
 						} else {
-							err = errors.New("unsupported type pairs")
+							panic("unsupported type pairs")
 						}
 					}
 				}
@@ -438,12 +451,12 @@ func Teepr(input interface{}, output interface{}, customValues ...func(interface
 				} else if fin.Kind() == reflect.Map {
 					err = Teepr(fin.Interface(), fout.Interface(), customValues...)
 					if err != nil {
+						log.Println("[Teepr]", err.Error())
 						return err
 					}
 				} else {
 
 					if fout.IsValid() && fin.IsValid() {
-
 						var atype reflect.Type
 						var abool bool
 						if fout.Kind() == reflect.Ptr {
@@ -457,6 +470,7 @@ func Teepr(input interface{}, output interface{}, customValues ...func(interface
 
 						err = Teepr(fin.Interface(), iout.Interface(), customValues...)
 						if err != nil {
+							log.Println("[Teepr]", err.Error())
 							return
 						}
 						if abool {
@@ -483,6 +497,7 @@ func Teepr(input interface{}, output interface{}, customValues ...func(interface
 				iItem := ival.Index(i)
 				err = Teepr(iItem.Interface(), oItem.Interface(), customValues...)
 				if err != nil {
+					log.Println("[Teepr]", err.Error())
 					return
 				}
 				outSlice = reflect.Append(outSlice, oItem.Elem())
@@ -617,6 +632,10 @@ func Teepr(input interface{}, output interface{}, customValues ...func(interface
 					oval.Set(reflect.ValueOf(dval))
 				}
 			}
+		} else {
+			theVal := append(make([]reflect.Value, 0), ival)
+			insideOutput := reflect.ValueOf(output)
+			insideOutput.MethodByName("Parse").Call(theVal)
 		}
 
 		return nil
@@ -624,12 +643,13 @@ func Teepr(input interface{}, output interface{}, customValues ...func(interface
 		pival := ival.Elem()
 		err = Teepr(pival.Interface(), output, customValues...)
 		if err != nil {
+			log.Println("[Teepr]Error: ", err)
 			return
 		}
 
 	default:
 		err = fmt.Errorf("unsupported type %T", input)
-		return
+		panic(err)
 	}
 
 	return
@@ -639,4 +659,8 @@ func Teepr(input interface{}, output interface{}, customValues ...func(interface
 // This function is mean to be used to decide whether a struct variable is empty or not
 func IsEmpty(t interface{}) bool {
 	return t == nil || reflect.DeepEqual(t, reflect.Zero(reflect.TypeOf(t)).Interface())
+}
+
+type Parser interface {
+	Parse(input interface{}) error
 }
