@@ -66,7 +66,6 @@ func (id *AppId) Parse(input interface{}) error {
 }
 
 func (id *AppId) String() string {
-	fmt.Println("String()")
 	tmp := uuid.UUID(*id)
 	b, _ := tmp.MarshalBinary()
 	return hex.EncodeToString(b)
@@ -196,7 +195,7 @@ func TestParserType(t *testing.T) {
 			Name  string
 			Email string
 		}{}
-		err := Teepr(input, &output)
+		err := Teepr(input, &output, Custom1)
 		if err != nil {
 			t.Fatalf("%s Expected Error nil, got %v", failed, err)
 		}
@@ -281,7 +280,7 @@ func TestCustomTypeAppId(t *testing.T) {
 			Name  string
 			Email string
 		}{}
-		err := Teepr(input, &output)
+		err := Teepr(input, &output, Custom1)
 		if err != nil {
 			t.Fatalf("%s Expected error nil, got %s", failed, err.Error())
 		}
@@ -290,4 +289,51 @@ func TestCustomTypeAppId(t *testing.T) {
 		}
 		t.Logf("%s result %v", success, output)
 	}
+}
+
+type MenuEntity struct {
+	Id   AppId `gorm:"primary_key;"`
+	Name string      `gorm:"name"`
+	Type string `gorm:"type"`
+	Description string `gorm:"description"`
+	CreatedBy string `gorm:"created_by"`
+	CreatedAt *time.Time `gorm:"created_at"`
+	UpdatedBy string `gorm:"updated_by"`
+	UpdatedAt *time.Time `gorm:"updated_at"`
+}
+
+func Custom1(input interface{}) (interface{}, error) {
+	tmp, ok := input.(string)
+	if !ok {
+		return nil, errors.New(fmt.Sprintf("Unable to parse input of type %v", reflect.TypeOf(input)))
+	}
+	v, err := hex.DecodeString(tmp)
+	if err != nil {
+		return nil, err
+	}
+	result, err := uuid.FromBytes(v)
+	if err != nil {
+		return nil, err
+	}
+	theId := AppId(result)
+	return theId, nil
+}
+
+func TestTypeWithAnnotation(t *testing.T) {
+	input := struct {
+		Id string
+		Name string
+		Type string
+		Description string
+	}{
+		"1DD1B664F14E11EBACE1ACDE48001122", "Test Name", "TN", "A Test Name Only",
+	}
+
+	output := MenuEntity{}
+	err := Teepr(input, &output, Custom1)
+	if err != nil {
+		t.Fatalf("%s Expected error nil, got %v", failed, err)
+	}
+
+	t.Logf("%s Result: %v", success, output)
 }

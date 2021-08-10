@@ -633,9 +633,14 @@ func Teepr(input interface{}, output interface{}, customValues ...func(interface
 				}
 			}
 		} else {
-			theVal := append(make([]reflect.Value, 0), ival)
-			insideOutput := reflect.ValueOf(output)
-			insideOutput.MethodByName("Parse").Call(theVal)
+			for i, c := range customValues {
+				result, resultError := c(ival.Interface())
+				if resultError == nil && reflect.ValueOf(result).Type().String() == oval.Type().String() {
+					oval.Set(reflect.ValueOf(result))
+				} else {
+					log.Printf("[Teepr]Error: Unable to process custom values %d: %v", i, resultError)
+				}
+			}
 		}
 
 		return nil
